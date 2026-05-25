@@ -1,39 +1,23 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Tap Game</title>
-
-<style>
-body { margin:0; font-family:Arial; background:#0f0f0f; color:white; text-align:center; }
-#tapBtn { width:200px; height:200px; border-radius:50%; background:#ffcc00; font-size:30px; margin-top:80px; border:none; }
-.screen { padding:20px; }
-.float { position:absolute; color:#00ff99; font-weight:bold; animation:up 0.8s ease-out; }
-@keyframes up { from { transform:translateY(0); opacity:1 } to { transform:translateY(-80px); opacity:0 } }
-button { padding:10px; margin:5px; }
-</style>
-
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXORA - Tap Game</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        body{background:#020617; color:white; font-family:sans-serif; margin:0; overflow:hidden; display:flex; justify-content:center;}
+        .app{width:100%; max-width:420px; height:100vh; padding:20px; text-align:center;}
+        .tap-btn{width:200px; height:200px; border-radius:50%; border:none; background:radial-gradient(#67e8f9,#2563eb); font-size:40px; cursor:pointer;}
+        .coins{font-size:40px; color:#facc15;}
+    </style>
 </head>
 <body>
-
-<div class="screen">
-  <h2 id="tgName">Player</h2>
-  <h1>Coins: <span id="coins">0</span></h1>
-  <h3>Energy: <span id="energyText">100/100</span></h3>
-
-  <button id="tapBtn">TAP</button>
-
-  <br><br>
-
-  <button onclick="dailyReward()">Daily Reward</button>
-  <button onclick="watchAd()">Watch Ad</button>
-  <button onclick="buyUpgrade('multitap')">Upgrade Tap</button>
-  <button onclick="buyUpgrade('energy')">Upgrade Energy</button>
-  <button onclick="inviteFriends()">Invite</button>
-</div>
-
-<script type="module" src="./app.js"></script>
-
+    <div class="app">
+        <h2 id="tgName">Player</h2>
+        <h1>Coins: <span id="coins">0</span></h1>
+        <h3>Energy: <span id="energy">100/100</span></h3>
+        <button class="tap-btn" id="tapBtn">⚡</button>
+    </div>
+    <script type="module" src="./app.js"></script>
 </body>
 </html>
