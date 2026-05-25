@@ -1,10 +1,11 @@
 // NEXORA PRO - Locked Firebase Configuration Credentials
 export const firebaseConfig = {
-  apiKey: "AIzaSyDK1uftei96IVay2mOlgXZMbmQlFWMV3GY",
-  authDomain: "nexora-81b15.firebaseapp.com",
-  projectId: "nexora-81b15",
-  storageBucket: "nexora-81b15.firebasestorage.app",
-  messagingSenderId: "17753817995",
-  appId: "1:17753817995:web:a2c91f139402d2166d16ee"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_AUTH_DOMAIN",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_STORAGE_BUCKET",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
 };
+
 export const BOT_USERNAME = "NexoraTap_bot";
