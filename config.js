@@ -1,5 +1,5 @@
 // NEXORA PRO - Locked Firebase Configuration Credentials
-const firebaseConfig = {
+export const firebaseConfig = {
   apiKey: "AIzaSyDK1uFtei96IVay2mOlgXZMbmQlFWMV3GY",
   authDomain: "nexora-81b15.firebaseapp.com",
   projectId: "nexora-81b15",
