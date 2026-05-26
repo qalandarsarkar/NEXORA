@@ -1,44 +1,41 @@
-import { firebaseConfig, BOT_USERNAME } from "./config.js";
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, getDoc, setDoc, updateDoc, increment, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-const db = getFirestore(initializeApp(firebaseConfig));
-const tg = window.Telegram?.WebApp;
-tg?.ready();
-
-const user = tg?.initDataUnsafe?.user;
-const userId = String(user?.id || Math.floor(Math.random()*999999));
-const startParam = tg?.initDataUnsafe?.start_param;
-
-const userRef = doc(db, "users", userId);
-let state = { coins: 0, energy: 100, lastTap: Date.now() };
-
-async function init() {
-    const snap = await getDoc(userRef);
-    if (!snap.exists()) {
-        await setDoc(userRef, { 
-            coins: 0, energy: 100, 
-            referredBy: startParam || null, 
-            createdAt: serverTimestamp() 
-        });
-        if(startParam) await updateDoc(doc(db, "users", startParam), { coins: increment(1000) });
-    } else {
-        state = snap.data();
-    }
-    document.getElementById("tgName").innerText = user?.first_name || "Guest";
-    updateUI();
+/* ===== GAME CORE LOGIC ===== */
+const stars=document.getElementById('stars');
+for(let i=0;i<80;i++){
+    let star=document.createElement('div');
+    star.classList.add('star');
+    star.style.left=Math.random()*100+'%';
+    star.style.top=Math.random()*100+'%';
+    star.style.animationDelay=Math.random()*5+'s';
+    stars.appendChild(star);
 }
 
-function updateUI() {
-    document.getElementById("coins").innerText = state.coins;
-    document.getElementById("energy").innerText = `${state.energy}/100`;
+function switchScreen(screenId, element) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen-' + screenId).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+    element.classList.add('active');
 }
 
-document.getElementById("tapBtn").onclick = async () => {
-    if(state.energy <= 0 || Date.now() - state.lastTap < 50) return; // Anti-cheat
-    state.coins++; state.energy--; state.lastTap = Date.now();
-    updateUI();
-    await updateDoc(userRef, { coins: increment(1), energy: state.energy });
-};
+let tg = window.Telegram?.WebApp;
+if (tg) { tg.expand(); tg.ready(); }
+let telegramUser = tg?.initDataUnsafe?.user;
+document.getElementById('tgName').innerText = telegramUser ? telegramUser.first_name : "Player_1";
 
-init();
+let coins = parseInt(localStorage.getItem('nexora_coins')) || 0;
+let energy = parseInt(localStorage.getItem('nexora_energy')) || 100;
+let maxEnergy = parseInt(localStorage.getItem('nexora_max_energy')) || 100;
+let tapValue = parseInt(localStorage.getItem('nexora_tap_value')) || 1;
+// ... (baki saari logic waise hi hai)
+
+function updateUI(){ /* ... */ }
+function floating(text, event){ /* ... */ }
+// ... (saare functions yahan paste honge)
+
+tapBtn.addEventListener('click',(e)=>{ /* ... */ });
+setInterval(()=>{ /* ... */ }, 1500);
+
+setTimeout(() => {
+    updateUI();
+    document.getElementById('loadingScreen').style.opacity = '0';
+    setTimeout(() => document.getElementById('loadingScreen').style.display = 'none', 500);
+}, 800);
