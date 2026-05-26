@@ -1,68 +1,780 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>NEXORA - Tap The Future</title>
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <style>
-        /* Yahan wahi purani CSS hai, maine koi change nahi kiya */
-        *{margin:0; padding:0; box-sizing:border-box; font-family:'Poppins',sans-serif; -webkit-user-select: none; user-select: none;}
-        body{background:#020617; overflow:hidden; color:white; height:100vh;}
-        .bg{position:fixed; width:100%; height:100%; background:radial-gradient(circle at top,#0ea5e9 0%,transparent 30%), radial-gradient(circle at bottom,#7c3aed 0%,transparent 30%), #020617; z-index:-3;}
-        .stars{position:fixed; width:100%; height:100%; overflow:hidden; z-index:-2;}
-        .star{position:absolute; width:2px; height:2px; background:white; border-radius:50%; animation: twinkle 3s infinite;}
-        @keyframes twinkle{0%,100%{opacity:0.2;} 50%{opacity:1;}}
-        .app{width:100%; max-width:420px; height:100vh; margin:auto; padding:20px; position:relative; overflow:hidden;}
-        .screen {display: none; height: calc(100vh - 150px); overflow-y: auto; padding-top: 10px;}
-        .screen.active {display: block; animation: fadeIn 0.3s ease-in-out;}
-        @keyframes fadeIn {from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); }}
-        .header{display:flex; justify-content:space-between; align-items:center; margin-top:10px; margin-bottom: 20px;}
-        .logo{font-size:28px; font-weight:700; background:linear-gradient(90deg,#38bdf8,#a855f7); -webkit-background-clip:text; -webkit-text-fill-color:transparent;}
-        .user-profile{display: flex; align-items: center; gap: 8px; background:rgba(255,255,255,0.08); padding:6px 12px; border-radius:15px; backdrop-filter:blur(10px); font-size:13px; border:1px solid rgba(255,255,255,0.1);}
-        .card{padding:20px; border-radius:30px; background:rgba(255,255,255,0.06); backdrop-filter:blur(15px); border:1px solid rgba(255,255,255,0.1); box-shadow:0 0 30px rgba(0,255,255,0.1); margin-bottom: 20px;}
-        .coins{text-align:center; margin-top:10px; margin-bottom: 15px;}
-        .coins h1{font-size:46px; color:#facc15; text-shadow: 0 0 15px rgba(250,204,21,0.3);}
-        .energy{margin-top:20px;}
-        .energy-top{display:flex; justify-content:space-between; margin-bottom:8px; font-size:14px;}
-        .bar{height:18px; background:rgba(255,255,255,0.08); border-radius:30px; overflow:hidden;}
-        .fill{height:100%; width:100%; background:linear-gradient(90deg,#22c55e,#06b6d4); border-radius:30px; transition:0.3s;}
-        .tap-area{display:flex; justify-content:center; margin-top:35px;}
-        .tap-btn{width:220px; height:220px; border-radius:50%; border:none; cursor:pointer; background:radial-gradient(circle at top,#67e8f9,#2563eb); box-shadow:0 0 20px #0ea5e9, 0 0 60px rgba(14,165,233,0.4), inset 0 0 30px rgba(255,255,255,0.2); font-size:46px; font-weight:700; color:white; transition:0.1s;}
-        .tap-btn:active{transform:scale(0.92);}
-        .level{margin-top:25px; text-align:center; font-size:22px;}
-        .section-title{margin-bottom:15px; font-size:20px; font-weight:600; background: linear-gradient(90deg, #fff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;}
-        .list-item {display: flex; align-items: center; justify-content: space-between; padding: 16px; background: rgba(255,255,255,0.05); border-radius: 20px; border: 1px solid rgba(255,255,255,0.08); margin-bottom: 12px; transition: 0.2s; cursor: pointer;}
-        .list-item:hover {background: rgba(255,255,255,0.1); transform: translateY(-2px);}
-        .item-detail {display: flex; align-items: center; gap: 15px;}
-        .item-icon {font-size: 26px; background: rgba(255,255,255,0.08); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 15px;}
-        .item-info h3 {font-size: 15px; font-weight: 600;}
-        .item-info p {font-size: 12px; color: #94a3b8;}
-        .reward-tag {color: #facc15; font-weight: bold; font-size: 14px;}
-        .wallet-container {text-align: center; padding: 40px 20px;}
-        .wallet-icon {font-size: 64px; margin-bottom: 20px; animation: pulse 2s infinite;}
-        @keyframes pulse {0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.05); opacity: 1; }}
-        .connect-btn {width: 100%; padding: 16px; border: none; border-radius: 20px; font-size: 16px; font-weight: 700; color: white; background: linear-gradient(90deg, #0098ea, #00c6ff); box-shadow: 0 4px 20px rgba(0, 152, 234, 0.4); cursor: pointer; transition: 0.2s;}
-        .connect-btn:active {transform: scale(0.97);}
-        .nav{position:fixed; bottom:15px; left:50%; transform:translateX(-50%); width:92%; max-width:420px; display:flex; justify-content:space-around; padding:12px; background:rgba(15, 23, 42, 0.6); border-radius:25px; backdrop-filter:blur(25px); border:1px solid rgba(255,255,255,0.08); z-index: 1000;}
-        .nav-item{text-align:center; font-size:12px; color: #64748b; cursor: pointer; transition: 0.2s; flex: 1;}
-        .nav-item.active {color: #38bdf8; font-weight: 600; transform: scale(1.1);}
-        .nav-item span {font-size: 22px; display: block; margin-bottom: 2px;}
-        .float{position:absolute; font-weight:700; color:#facc15; font-size: 24px; animation:up 0.8s ease-out forwards; pointer-events:none; z-index: 100; text-shadow: 0 2px 10px rgba(0,0,0,0.5);}
-        @keyframes up{0%{opacity:1; transform:translateY(0) scale(1);} 100%{opacity:0; transform:translateY(-100px) scale(0.8);}}
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NEXORA</title>
+
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:'Poppins',sans-serif;
+-webkit-user-select:none;
+user-select:none;
+}
+
+body{
+background:#030712;
+color:white;
+overflow:hidden;
+height:100vh;
+}
+
+.bg{
+position:fixed;
+width:100%;
+height:100%;
+background:
+radial-gradient(circle at top,#0ea5e9 0%,transparent 30%),
+radial-gradient(circle at bottom,#7c3aed 0%,transparent 35%),
+#030712;
+z-index:-2;
+}
+
+.app{
+max-width:430px;
+margin:auto;
+height:100vh;
+padding:15px;
+position:relative;
+}
+
+.header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-top:10px;
+}
+
+.logo{
+font-size:28px;
+font-weight:700;
+background:linear-gradient(90deg,#38bdf8,#8b5cf6);
+-webkit-background-clip:text;
+-webkit-text-fill-color:transparent;
+}
+
+.user{
+background:rgba(255,255,255,0.08);
+padding:8px 14px;
+border-radius:20px;
+font-size:13px;
+backdrop-filter:blur(10px);
+}
+
+.screen{
+display:none;
+height:calc(100vh - 140px);
+overflow-y:auto;
+padding-bottom:100px;
+}
+
+.active{
+display:block;
+}
+
+.card{
+background:rgba(255,255,255,0.06);
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(15px);
+border-radius:28px;
+padding:20px;
+margin-top:20px;
+box-shadow:0 0 25px rgba(0,0,0,0.2);
+}
+
+.balance{
+text-align:center;
+}
+
+.balance h1{
+font-size:52px;
+color:#facc15;
+margin-top:10px;
+}
+
+.level{
+margin-top:10px;
+font-size:18px;
+color:#94a3b8;
+}
+
+.energy{
+margin-top:25px;
+}
+
+.energy-top{
+display:flex;
+justify-content:space-between;
+font-size:14px;
+margin-bottom:8px;
+}
+
+.bar{
+height:18px;
+background:#111827;
+border-radius:20px;
+overflow:hidden;
+}
+
+.fill{
+height:100%;
+width:100%;
+background:linear-gradient(90deg,#22c55e,#06b6d4);
+transition:0.3s;
+}
+
+.tap-area{
+display:flex;
+justify-content:center;
+margin-top:35px;
+}
+
+.tap-btn{
+width:220px;
+height:220px;
+border:none;
+border-radius:50%;
+background:radial-gradient(circle,#38bdf8,#2563eb);
+font-size:55px;
+color:white;
+cursor:pointer;
+box-shadow:
+0 0 20px #0ea5e9,
+0 0 60px rgba(14,165,233,0.5);
+transition:0.1s;
+}
+
+.tap-btn:active{
+transform:scale(0.92);
+}
+
+.float{
+position:absolute;
+font-size:26px;
+font-weight:bold;
+color:#facc15;
+pointer-events:none;
+animation:floatUp 0.8s forwards;
+z-index:999;
+}
+
+@keyframes floatUp{
+0%{
+opacity:1;
+transform:translateY(0);
+}
+100%{
+opacity:0;
+transform:translateY(-100px);
+}
+}
+
+.section-title{
+margin-top:10px;
+margin-bottom:15px;
+font-size:20px;
+font-weight:600;
+}
+
+.item{
+background:rgba(255,255,255,0.05);
+padding:16px;
+border-radius:20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:14px;
+border:1px solid rgba(255,255,255,0.06);
+}
+
+.left{
+display:flex;
+align-items:center;
+gap:14px;
+}
+
+.icon{
+width:52px;
+height:52px;
+border-radius:16px;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:24px;
+background:rgba(255,255,255,0.08);
+}
+
+.item h3{
+font-size:15px;
+}
+
+.item p{
+font-size:12px;
+color:#94a3b8;
+margin-top:2px;
+}
+
+.reward{
+color:#facc15;
+font-weight:700;
+font-size:14px;
+}
+
+.wallet-box{
+text-align:center;
+padding:30px 15px;
+}
+
+.wallet-icon{
+font-size:70px;
+margin-bottom:15px;
+}
+
+.connect-btn{
+width:100%;
+padding:16px;
+border:none;
+border-radius:18px;
+font-size:16px;
+font-weight:700;
+cursor:pointer;
+background:linear-gradient(90deg,#0ea5e9,#2563eb);
+color:white;
+margin-top:25px;
+}
+
+.nav{
+position:fixed;
+bottom:15px;
+left:50%;
+transform:translateX(-50%);
+width:92%;
+max-width:430px;
+display:flex;
+justify-content:space-around;
+background:rgba(15,23,42,0.7);
+padding:12px;
+border-radius:24px;
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.nav-item{
+text-align:center;
+font-size:12px;
+color:#94a3b8;
+flex:1;
+cursor:pointer;
+}
+
+.nav-item span{
+display:block;
+font-size:22px;
+margin-bottom:2px;
+}
+
+.nav-active{
+color:#38bdf8;
+font-weight:700;
+}
+
+.loading{
+position:fixed;
+width:100%;
+height:100%;
+background:#030712;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:24px;
+font-weight:700;
+z-index:9999;
+color:#38bdf8;
+transition:0.4s;
+}
+
+</style>
 </head>
+
 <body>
-    <div id="loadingScreen" style="position:fixed; top:0; left:0; width:100%; height:100%; background:#020617; z-index:9999; display:flex; justify-content:center; align-items:center; font-size:22px; font-weight:bold; color:#38bdf8; transition: opacity 0.5s;">⚡ Loading NEXORA...</div>
-    <div class="app">
-        <div class="header"><div class="logo">⚡ NEXORA</div><div class="user-profile">🟢 <span id="tgName">Loading...</span></div></div>
-        <div id="screen-home" class="screen active"><div class="card"><div class="coins"><p>Total Balance</p><h1 id="coins">0</h1></div><div class="energy"><div class="energy-top"><span>⚡ Energy</span><span id="energyText">100/100</span></div><div class="bar"><div class="fill" id="fill"></div></div></div><div class="tap-area"><button class="tap-btn" id="tapBtn">🚀</button></div><div class="level">Rank: <span id="rank">Rookie</span></div></div></div>
-        <div id="screen-earn" class="screen">...</div>
-        <div id="screen-boost" class="screen">...</div>
-        <div id="screen-wallet" class="screen">...</div>
-    </div>
-    <div class="nav">...</div>
-    <script src="App.js"></script>
+
+<div class="bg"></div>
+
+<div class="loading" id="loading">
+⚡ Loading NEXORA...
+</div>
+
+<div class="app">
+
+<div class="header">
+<div class="logo">⚡ NEXORA</div>
+
+<div class="user">
+🟢 <span id="username">Player</span>
+</div>
+</div>
+
+<!-- HOME -->
+
+<div class="screen active" id="home">
+
+<div class="card">
+
+<div class="balance">
+<p>Total Balance</p>
+<h1 id="coins">0</h1>
+
+<div class="level">
+Rank:
+<span id="rank">Rookie</span>
+</div>
+</div>
+
+<div class="energy">
+
+<div class="energy-top">
+<span>⚡ Energy</span>
+<span id="energyText">100/100</span>
+</div>
+
+<div class="bar">
+<div class="fill" id="fill"></div>
+</div>
+
+</div>
+
+<div class="tap-area">
+<button class="tap-btn" id="tapBtn">
+🚀
+</button>
+</div>
+
+</div>
+
+</div>
+
+<!-- EARN -->
+
+<div class="screen" id="earn">
+
+<div class="section-title">
+💎 Earn Coins
+</div>
+
+<div class="item" onclick="dailyReward()">
+
+<div class="left">
+<div class="icon">🎁</div>
+
+<div>
+<h3>Daily Reward</h3>
+<p>Claim everyday bonus</p>
+</div>
+</div>
+
+<div class="reward">
++100
+</div>
+
+</div>
+
+<div class="item" onclick="watchAd()">
+
+<div class="left">
+<div class="icon">🎥</div>
+
+<div>
+<h3>Watch Ads</h3>
+<p>Earn coins by ads</p>
+</div>
+</div>
+
+<div class="reward">
++250
+</div>
+
+</div>
+
+<div class="item">
+
+<div class="left">
+<div class="icon">👥</div>
+
+<div>
+<h3>Invite Friends</h3>
+<p>Referral rewards system</p>
+</div>
+</div>
+
+<div class="reward">
++1000
+</div>
+
+</div>
+
+</div>
+
+<!-- BOOST -->
+
+<div class="screen" id="boost">
+
+<div class="section-title">
+🚀 Boosts
+</div>
+
+<div class="item" onclick="buyTap()">
+
+<div class="left">
+<div class="icon">👆</div>
+
+<div>
+<h3>Multitap</h3>
+<p>Increase tap reward</p>
+</div>
+</div>
+
+<div class="reward">
+500
+</div>
+
+</div>
+
+<div class="item" onclick="buyEnergy()">
+
+<div class="left">
+<div class="icon">🔋</div>
+
+<div>
+<h3>Energy Boost</h3>
+<p>Increase max energy</p>
+</div>
+</div>
+
+<div class="reward">
+1000
+</div>
+
+</div>
+
+</div>
+
+<!-- WALLET -->
+
+<div class="screen" id="wallet">
+
+<div class="card wallet-box">
+
+<div class="wallet-icon">
+👛
+</div>
+
+<h2>TON Wallet</h2>
+
+<p style="margin-top:10px;color:#94a3b8;font-size:14px;">
+Connect wallet for future airdrop rewards
+</p>
+
+<button class="connect-btn" onclick="connectWallet()">
+Connect Wallet
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+<!-- NAVBAR -->
+
+<div class="nav">
+
+<div class="nav-item nav-active" onclick="showScreen('home',this)">
+<span>🏠</span>
+Home
+</div>
+
+<div class="nav-item" onclick="showScreen('earn',this)">
+<span>💎</span>
+Earn
+</div>
+
+<div class="nav-item" onclick="showScreen('boost',this)">
+<span>🚀</span>
+Boost
+</div>
+
+<div class="nav-item" onclick="showScreen('wallet',this)">
+<span>👛</span>
+Wallet
+</div>
+
+</div>
+
+<script>
+
+/* TELEGRAM */
+
+let tg=window.Telegram?.WebApp;
+
+if(tg){
+tg.expand();
+tg.ready();
+}
+
+let user=tg?.initDataUnsafe?.user;
+
+document.getElementById("username").innerText=
+user ? user.first_name : "Player";
+
+/* DATA */
+
+let coins=
+parseInt(localStorage.getItem("coins"))||0;
+
+let energy=
+parseInt(localStorage.getItem("energy"))||100;
+
+let maxEnergy=
+parseInt(localStorage.getItem("maxEnergy"))||100;
+
+let tapValue=
+parseInt(localStorage.getItem("tapValue"))||1;
+
+/* ELEMENTS */
+
+const coinsEl=document.getElementById("coins");
+const energyText=document.getElementById("energyText");
+const fill=document.getElementById("fill");
+const tapBtn=document.getElementById("tapBtn");
+const rank=document.getElementById("rank");
+
+/* UPDATE */
+
+function updateUI(){
+
+coinsEl.innerText=
+coins.toLocaleString();
+
+energyText.innerText=
+energy+"/"+maxEnergy;
+
+fill.style.width=
+(energy/maxEnergy*100)+"%";
+
+if(coins>=10000){
+rank.innerText="Legend";
+}
+else if(coins>=5000){
+rank.innerText="Master";
+}
+else if(coins>=2000){
+rank.innerText="Elite";
+}
+else{
+rank.innerText="Rookie";
+}
+
+localStorage.setItem("coins",coins);
+localStorage.setItem("energy",energy);
+localStorage.setItem("maxEnergy",maxEnergy);
+localStorage.setItem("tapValue",tapValue);
+
+}
+
+/* FLOAT */
+
+function floating(text,x,y){
+
+let div=document.createElement("div");
+
+div.className="float";
+
+div.innerText=text;
+
+div.style.left=x+"px";
+div.style.top=y+"px";
+
+document.body.appendChild(div);
+
+setTimeout(()=>{
+div.remove();
+},800);
+
+}
+
+/* TAP */
+
+tapBtn.addEventListener("click",(e)=>{
+
+if(energy<=0){
+
+floating(
+"Low Energy",
+e.clientX,
+e.clientY
+);
+
+return;
+
+}
+
+coins+=tapValue;
+
+energy--;
+
+updateUI();
+
+navigator.vibrate?.(10);
+
+floating(
+"+"+tapValue,
+e.clientX,
+e.clientY
+);
+
+});
+
+/* ENERGY REGEN */
+
+setInterval(()=>{
+
+if(energy<maxEnergy){
+
+energy++;
+
+updateUI();
+
+}
+
+},1500);
+
+/* SCREENS */
+
+function showScreen(id,el){
+
+document.querySelectorAll(".screen")
+.forEach(s=>s.classList.remove("active"));
+
+document.getElementById(id)
+.classList.add("active");
+
+document.querySelectorAll(".nav-item")
+.forEach(n=>n.classList.remove("nav-active"));
+
+el.classList.add("nav-active");
+
+}
+
+/* EARN */
+
+function dailyReward(){
+
+coins+=100;
+
+updateUI();
+
+alert("Daily reward claimed!");
+
+}
+
+function watchAd(){
+
+alert("Ad playing...");
+
+setTimeout(()=>{
+
+coins+=250;
+
+updateUI();
+
+alert("Reward added!");
+
+},2000);
+
+}
+
+/* BOOST */
+
+function buyTap(){
+
+if(coins>=500){
+
+coins-=500;
+
+tapValue++;
+
+updateUI();
+
+alert("Tap upgraded!");
+
+}else{
+
+alert("Not enough coins");
+
+}
+
+}
+
+function buyEnergy(){
+
+if(coins>=1000){
+
+coins-=1000;
+
+maxEnergy+=50;
+
+energy=maxEnergy;
+
+updateUI();
+
+alert("Energy upgraded!");
+
+}else{
+
+alert("Not enough coins");
+
+}
+
+}
+
+/* WALLET */
+
+function connectWallet(){
+
+alert("TON Wallet Connected!");
+
+}
+
+/* START */
+
+updateUI();
+
+window.onload=()=>{
+
+setTimeout(()=>{
+
+let loading=
+document.getElementById("loading");
+
+loading.style.opacity="0";
+
+setTimeout(()=>{
+loading.style.display="none";
+},400);
+
+},1000);
+
+};
+
+</script>
+
 </body>
 </html>
